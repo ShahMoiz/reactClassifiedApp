@@ -34,3 +34,11 @@
 [0815/002342.413:INFO:rc_l10n_handler.cc(137)] Trying language from system preferred list: en-US
 [0815/002342.413:INFO:rc_l10n_handler.cc(180)] Retrying after adjustments: en-US
 [0815/002342.413:INFO:rc_l10n_handler.cc(137)] Trying language from system preferred list: en
+[0827/172851.375:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0827/173851.378:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0827/173851.378:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0827/174351.530:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0827/175036.962:ERROR:process_info.cc(632)] range at 0xae7f48ea00000000, size 0xa4 fully unreadable
+[0827/175036.962:ERROR:process_info.cc(632)] range at 0xae7f490a00000000, size 0xa4 fully unreadable
+[0827/175036.962:ERROR:process_info.cc(632)] range at 0x0, size 0xa4 fully unreadable
+[0827/175038.143:ERROR:crash_report_database_win.cc(427)] unexpected header
