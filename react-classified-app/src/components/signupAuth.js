@@ -1,14 +1,14 @@
 import React from 'react';
 import {Link} from 'react-router';
-import TextInput from './textInput'
+import TextInput from './textInput';
 var firebase = require("firebase/app");
 
 class SignupAuth extends React.Component {
     constructor(){
         super();
         this.state = {
-            firstName: 'Abdul',
-            lastname: 'Moiz',
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
             re_password: '',
@@ -16,19 +16,16 @@ class SignupAuth extends React.Component {
         }
         this.update = this.update.bind(this)
     }
-    submitSignupForm(fname, lname, email, pass, rePass){
-        // this.props.
-        console.log(fname, lname, email, pass, rePass);
-        this.setState({
-            firstName: fname,
-            lastname: lname,
-            email: email,
-            password: pass, 
-            re_password: rePass
-        })
-        console.log(this.state.firstName)
-
-        firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.re_password).catch((error) => {
+    submitSignupForm(){
+        // console.log("this.state.firstName")
+        // alert("Password Does Not Match")
+        let re_pass = this.state.re_password,
+        pass = this.state.password,
+        email = this.state.email;
+        console.log("Password: ",pass)
+        console.log("Retype Password: ",re_pass)
+        if(pass == re_pass){
+            firebase.auth().createUserWithEmailAndPassword(email, re_pass).catch((error) => {
             alert(error.name)
             alert(error.message)
         }).then(()=> {
@@ -38,6 +35,14 @@ class SignupAuth extends React.Component {
                     toggle: !this.state.toggle
                 })
         })
+        }
+        else {
+            alert("Password Does Not Match")
+        }
+        // console.log("this.state.firstName")
+        
+
+        
 
     }
     // update 
@@ -54,7 +59,7 @@ class SignupAuth extends React.Component {
                 <h2>Register Your Self as a Seller</h2>
                     <form action="" name="registration" onSubmit={(event) => {
                             event.preventDefault()
-                            this.submitSignupForm(this.f_name.value, this.l_name.value, this.email.value, this.password.value, this.re_password.value)
+                            this.submitSignupForm()
                         }}>
                         <TextInput
                             label="First Name"
