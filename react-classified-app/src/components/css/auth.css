@@ -57,3 +57,9 @@ form .error {
   text-align: center;
   text-decoration: underline;
 }
+.err {
+  color: white;
+  font-size: 10px;
+  text-decoration: underline red;
+  /* text-decoration-color: red; */
+}

@@ -1,22 +1,34 @@
 import React from 'react';
-
 import TextInput from './textInput';
 
+
+var firebase = require("firebase/app");
 export default class LoginAuth extends React.Component {
     constructor(){
         super();
         this.state ={
-            email: '',
-            password: ''
+            forms: {
+                email: '',
+                password: ''
+            }
         }
-        this.update = this.update.bind(this)
+        this.update = this.update.bind(this);
     }
     submitLoginpForm(){
-        console.log("submitLoginpForm Works")
+        let email = this.state.forms.email,
+        pass = this.state.forms.password
+        console.log("submitLoginpForm Works");
+        firebase.auth().signInWithEmailAndPassword(email, pass).then(() => {
+            console.log("login Successfull");
+        }).catch((error) => {
+            error.code
+            error.error
+        })
     }
     update(value, event){
+        this.state.forms[value] = event.target.value
         this.setState({
-            [value]: event.target.value
+            forms: this.state.forms
         })
         console.log(this.state.email)
     }
@@ -30,7 +42,7 @@ export default class LoginAuth extends React.Component {
                             this.submitLoginpForm()
                         }}>
                         <TextInput
-                            label="email"
+                            label="Email"
                             type="email"
                             placeholder="abdul@moiz.com"
                             inputValue={this.state.email}
