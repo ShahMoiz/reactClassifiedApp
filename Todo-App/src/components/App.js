@@ -85,7 +85,7 @@ class TodoApp extends Component {
              createTask={this.createTask}
              addTask={this.addTask} />
         <section 
-        className="row" > 
+        className="row"> 
           {
             this.state.tasks.map((task, index) => {
               return (

@@ -1,31 +1,21 @@
 import React from 'react';
 import {Link} from 'react-router';
 import TextInput from './textInput';
-var firebase = require("firebase/app");
+import HeaderComponent from './header.js';
+import * as firebase from 'firebase';
+// var firebase = require("firebase/app");
 
+var config = {
+    apiKey: "AIzaSyDR6snkV1_2arfP2YGFjplo3dW-a5o1JCk",
+    authDomain: "reactclassifiedapp.firebaseapp.com",
+    databaseURL: "https://reactclassifiedapp.firebaseio.com",
+    projectId: "reactclassifiedapp",
+    storageBucket: "reactclassifiedapp.appspot.com",
+    messagingSenderId: "302936753485"
+  };
+  firebase.initializeApp(config);
 class SignupAuth extends React.Component {
-    textInputName = [
-            this.firstInput = {
-                label: "First Name",
-                name: 'firstName',
-                placeholder: "Abdul",
-                type: "text",
-                value: ''
-            },
-            this.secondInput = {
-                label: "Last Name",
-                name: 'lastName',
-                placeholder: "Moiz",
-                type: "text",
-                value: ''
-            }
-        // label: ['FirstName', 'Last Name', 'Email', 'Password', 'Retype password'],
-        // placeholder: ['Abdul', 'Moiz', 'abdul@moiz.com', '&#9679;&#9679;&#9679;&#9679;&#9679;' , '&#9679;&#9679;&#9679;&#9679;&#9679;']
-    ]
-        // label: ['FirstName', 'Last Name', 'Email', 'Password', 'Retype password'],
-        // type: ['text', 'text', 'email', 'password', 'password'],
-        // placeholder: ['Abdul', 'Moiz', 'abdul@moiz.com', '&#9679;&#9679;&#9679;&#9679;&#9679;' , '&#9679;&#9679;&#9679;&#9679;&#9679;']
-    // ]
+    
     constructor(){
         super();
         this.state = {
@@ -38,25 +28,38 @@ class SignupAuth extends React.Component {
             },
             
             toggle: false,
-            errorEmailMsg: '',
-            errorPassMsg: '',
-            errorRePassMsg: '',
             errorMsg: ''
         }
         this.submitSignupForm = this.submitSignupForm.bind(this)
         this.update = this.update.bind(this)
     }
+
+    textInputName = [
+            this.firstNameInput = {label: "First Name",name: 'firstName',placeholder: "Abdul",type: "text"},
+            this.lastNameInput = {label: "Last Name",name: 'lastName',placeholder: "Moiz",type: "text"},
+            this.emailInput = {label: "Email",name: 'email',placeholder: "abdul@moiz.com",type: "email"},
+            this.passwordInput = {label: "Password",name: 'password',placeholder: 'password123',type: "password"},
+            this.rePassInput = {label: "Retype Password",name: 're_password',placeholder: "password123",//&#9679;
+                type: "password",
+            }   
+    ];
+
     submitSignupForm(){
         let re_pass = this.state.forms.re_password,
         pass = this.state.forms.password,
         email = this.state.forms.email;
-        // // console.log("Password: ",pass)
-        // // console.log("Retype Password: ",re_pass)
-        if(pass == re_pass){
+        let username = email.substring(0, email.indexOf("@"))
+        if(pass === re_pass){
             console.log("Password: ", pass , "email: ", email);
-            firebase.auth().createUserWithEmailAndPassword(email, re_pass).then(()=> {
+            firebase.auth().createUserWithEmailAndPassword(email, pass).then(()=> {
             alert("SignUp Successfully")
-                
+                firebase.database().ref('signup/' + username).set({
+                    firstName: this.state.forms.firstName,
+                    lastName : this.state.forms.lastName,
+                    username : username,
+                    email    : email,
+                    password : re_pass
+                })
                 this.setState({
                     toggle: !this.state.toggle
                 })
@@ -66,41 +69,26 @@ class SignupAuth extends React.Component {
             this.setState({
                 errorMsg: error.message    
             })
-            // if(error.code == "auth/weak-password"){
-            //     this.setState({
-            //     errorPassMsg: error.message
-            // })
-            // }
-            // else {
-            //     console.log("Password Does Not Same")
-            // this.setState({
-            //     errorEmailMsg: error.message
-            // })
-        // }
     })
         }
         else {
             this.setState({
                 errorRePassMsg: "Password Does Not Match"
             })
-            // alert("Password Does Not Match")
         }
-        // console.log("this.state.firstName")
         
 
-        
-
-    }
-    // update 
+    } 
     update(value, event){
         this.state.forms[value] = event.target.value
         this.setState({
             forms: this.state.forms
         })
-        console.log(this.state.forms)
     }
     render(){
         return(
+            <div>
+                <HeaderComponent />
             <section className="container">
                 <div className="row">
                 <h2>Register Your Self as a Seller</h2>
@@ -110,8 +98,9 @@ class SignupAuth extends React.Component {
                              this.submitSignupForm() 
                         }}>
                         {
-                            this.textInputName.map((textInput) => {
+                            this.textInputName.map((textInput, index) => {
                             return(    <TextInput
+                                    key={index}
                                     label={textInput.label}
                                     type={textInput.type}
                                     placeholder={textInput.placeholder}
@@ -120,45 +109,6 @@ class SignupAuth extends React.Component {
                                 />)
                             })
                         }
-                         {/* <TextInput
-                            label="First Name"
-                            type="text"
-                            placeholder="Abdul"
-                            inputValue={this.state.forms.firstName}
-                            update={this.update.bind(null, "firstName")}
-                        />
-                        <TextInput
-                            label="Last Name"
-                            type="text"
-                            placeholder="Moiz"
-                            inputValue={this.state.lastname}
-                            update={this.update.bind(null, "lastName")}
-                        />
-                        <TextInput
-                            label="email"
-                            type="email"
-                            placeholder="abdul@moiz.com"
-                            inputValue={this.state.email}
-                            update={this.update.bind(null, "email")}
-                        /> */}
-                        {/* <p className="err">{this.state.errorEmailMsg}</p> */}
-                        {/* <TextInput
-                            label="Password"
-                            type="password"
-                            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"
-                            inputValue={this.state.password}
-                            update={this.update.bind(null, "password")}
-                        /> */}
-                        {/* <p className="err">{this.state.errorPassMsg}</p> */}
-                        {/* <TextInput
-                            label="Retype Password"
-                            type="password"
-                            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"
-                            inputValue={this.state.re_password}
-                            update={this.update.bind(null, "re_password")}
-                        />  */}
-                        {/* <p className="err">{this.state.errorRePassMsg}</p> */}
-                        
                         <button type="submit">Register</button>
                         <p className="err">{this.state.errorMsg}</p>
                             {
@@ -168,8 +118,10 @@ class SignupAuth extends React.Component {
                     
                 </div>  
             </section>
+            </div>
         )
     }
 }
 
 export default SignupAuth
+
